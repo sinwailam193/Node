@@ -1,8 +1,8 @@
 import { Router } from "express";
-import hello from "./helloworld";
+import mainApp from "./mainApp";
 
 const router = Router();
 
-router.use("/", hello);
+router.use("/", mainApp);
 
 module.exports = router;

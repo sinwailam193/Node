@@ -3,7 +3,7 @@ import { createWriteStream } from "fs";
 import morgan from "morgan";
 import favicon from "serve-favicon";
 import { json, urlencoded } from "body-parser";
-import cookieParser from "cookie-parser";
+import hbs from "express-handlebars";
 
 import routes from "./routes/main";
 
@@ -16,12 +16,17 @@ if (process.env.NODE_ENV === "production") {
     directory = __dirname.replace("/prod", "");
 }
 
+// setup view engine
+app.engine("hbs", hbs({ extname: "hbs", defaultLayout: "layout", layoutsDir: `${directory}/views/layouts/` }));
+app.set("views", `${directory}/views`);
+app.set("view engine", "hbs");
+
 app.use(favicon(`${directory}/public/node.jpeg`));
 if (env === "production") {
     app.use(morgan("common", {
         skip: (req, res) => res.statusCode < 400,
         stream: createWriteStream(
-            `${__dirname.slice(0, __dirname.indexOf("prod"))}morgan.log`,
+            `${directory}/morgan.log`,
             { flags: "a" }
         )
     }));
@@ -30,7 +35,7 @@ if (env === "production") {
 }
 app.use(json({ type: "*/*" }));
 app.use(urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(express.static(`${directory}/public`));
 
 app.use("/", routes);
 

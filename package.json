@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "clean": "rm -rf prod",
+    "clean": "rm -rf prod morgan.log",
     "dev": "NODE_ENV=dev nodemon server.js",
-    "prestart": "babel src --out-dir prod",
+    "prestart": "npm run clean && babel src --out-dir prod",
     "start": "NODE_ENV=production node server.js"
   },
   "repository": {
@@ -35,8 +35,8 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.17.2",
-    "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
     "morgan": "^1.8.2",
     "serve-favicon": "^2.4.3"
   }
